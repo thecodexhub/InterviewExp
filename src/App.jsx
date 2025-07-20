@@ -156,314 +156,404 @@ function App() {
 
         {/* Form */}
         {!isSubmitted && (
-          <div className="bg-gray-900 border border-gray-800 rounded-2xl p-4 sm:p-8 shadow-2xl">
-            <form onSubmit={handleSubmit} className="space-y-6">
-              {/* Branch and Passout Year */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Branch <span className="text-red-400">*</span>
-                  </label>
-                  <select
-                    required
-                    value={formData.branch}
-                    onChange={e => setFormData({ ...formData, branch: e.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all duration-200"
-                  >
-                    <option value="">Select branch</option>
-                    <option value="Computer">COMPUTER</option>
-                    <option value="IT">IT</option>
-                    <option value="CSD">CSD</option>
-                    <option value="AIDS">AIDS</option>
-                    <option value="ENTC">ENTC</option>
-                    <option value="ROBOTICS">ROBOTICS</option>
-                    <option value="Other">Other</option>
-                  </select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Passout Year <span className="text-red-400">*</span>
-                  </label>
-                  <select
-                    required
-                    value={formData.passoutYear}
-                    onChange={e => setFormData({ ...formData, passoutYear: e.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all duration-200"
-                  >
-                    <option value="">Select year</option>
-                    <option value="2024">2024</option>
-                    <option value="2025">2025</option>
-                    <option value="2026">2026</option>
-                    {/* <option value="2027">2027</option> */}
-                  </select>
-                </div>
-              </div>
-              {/* Basic Information */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Name <span className="text-red-400">*</span>
-                  </label>
-                  <input required
-                    type="text"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500"
-                    placeholder="Your name"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Company <span className="text-red-400">*</span>
-                  </label>
-                  <div className="relative">
-                    <Briefcase className="absolute left-3 top-3 w-4 h-4 sm:w-5 sm:h-5 text-gray-500" />
-                    <input
-                      type="text"
-                      required
-                      value={formData.company}
-                      onChange={(e) => setFormData({ ...formData, company: e.target.value.toUpperCase() })}
-                      className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-11 pr-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500"
-                      placeholder="Company name"
-                    />
-                  </div>
-                </div>
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Role <span className="text-red-400">*</span>
-                  </label>
+          <div className="bg-gradient-to-br from-black via-gray-950 to-slate-950 border border-slate-800/50 rounded-2xl p-4 sm:p-8 shadow-2xl shadow-black/50">
+  <form onSubmit={handleSubmit} className="space-y-6">
+    {/* Branch and Passout Year */}
+    <div className="grid md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-sm font-medium text-slate-200 mb-2">
+          Branch <span className="text-red-400">*</span>
+        </label>
+        <select
+          required
+          value={formData.branch}
+          onChange={e => setFormData({ ...formData, branch: e.target.value })}
+          className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-white placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner [&>option]:bg-gray-900 [&>option]:text-white [&>option]:py-2"
+          style={{
+            colorScheme: "dark"
+          }}
+        >
+          <option value="" disabled hidden>
+            Select Branch
+          </option>
+          <option value="Computer" className="bg-gray-900 text-white">
+            COMPUTER
+          </option>
+          <option value="IT" className="bg-gray-900 text-white">
+            IT
+          </option>
+          <option value="CSD" className="bg-gray-900 text-white">
+            CSD
+          </option>
+          <option value="AIDS" className="bg-gray-900 text-white">
+            AIDS
+          </option>
+          <option value="ENTC" className="bg-gray-900 text-white">
+            ENTC
+          </option>
+          <option value="ROBOTICS" className="bg-gray-900 text-white">
+            ROBOTICS
+          </option>
+          <option value="Other" className="bg-gray-900 text-white">
+            Other
+          </option>
+        </select>
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-slate-200 mb-2">
+          Passout Year <span className="text-red-400">*</span>
+        </label>
+        <select
+          required
+          value={formData.passoutYear}
+          onChange={e =>
+            setFormData({ ...formData, passoutYear: e.target.value })
+          }
+          className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-white placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner [&>option]:bg-gray-900 [&>option]:text-white [&>option]:py-2"
+          style={{
+            colorScheme: "dark"
+          }}
+        >
+          <option value="" disabled hidden>
+            Select Year
+          </option>
+          <option value="2024" className="bg-gray-900 text-white">
+            2024
+          </option>
+          <option value="2025" className="bg-gray-900 text-white">
+            2025
+          </option>
+          <option value="2026" className="bg-gray-900 text-white">
+            2026
+          </option>
+          {/* <option value="2027">2027</option> */}
+        </select>
+      </div>
+    </div>
+    {/* Basic Information */}
+    <div className="grid md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-sm font-medium text-slate-200 mb-2">
+          Name <span className="text-red-400">*</span>
+        </label>
+        <input
+          required
+          type="text"
+          value={formData.name}
+          onChange={e => setFormData({ ...formData, name: e.target.value })}
+          className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner"
+          placeholder="Your name"
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-slate-200 mb-2">
+          Company <span className="text-red-400">*</span>
+        </label>
+        <div className="relative">
+          <Briefcase className="absolute left-3 top-3 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
+          <input
+            type="text"
+            required
+            value={formData.company}
+            onChange={e =>
+              setFormData({
+                ...formData,
+                company: e.target.value.toUpperCase()
+              })
+            }
+            className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg pl-11 pr-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner"
+            placeholder="Company name"
+          />
+        </div>
+      </div>
+    </div>
+    <div className="grid md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-sm font-medium text-slate-200 mb-2">
+          Role <span className="text-red-400">*</span>
+        </label>
+        <input
+          type="text"
+          required
+          value={formData.role}
+          onChange={e => setFormData({ ...formData, role: e.target.value })}
+          className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner"
+          placeholder="Software Engineer, Data Analyst, etc."
+        />
+      </div>
+      <div>
+        <label className="block text-sm font-medium text-slate-200 mb-2">
+          Number of Rounds <span className="text-red-400">*</span>
+        </label>
+        <select
+          required
+          value={formData.numberOfRounds}
+          onChange={e => handleNumberOfRoundsChange(e.target.value)}
+          className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner [&>option]:bg-gray-900 [&>option]:text-white [&>option]:py-2"
+          style={{
+            colorScheme: "dark"
+          }}
+        >
+          <option value={0} className="bg-gray-900 text-white">
+            Select number of rounds
+          </option>
+          {[1, 2, 3, 4, 5].map(num => (
+            <option key={num} value={num} className="bg-gray-900 text-white">
+              {num} {num > 1 ? "" : ""}
+            </option>
+          ))}
+          <option value="5+" className="bg-gray-900 text-white">
+            5+ Rounds
+          </option>
+        </select>
+      </div>
+    </div>
+    {/* Dynamic Round Fields */}
+    {formData.rounds.length > 0 && (
+      <div className="space-y-4">
+        <h3 className="text-base sm:text-lg font-semibold text-slate-100 border-b border-slate-700/70 pb-2">
+          Interview Rounds
+        </h3>
+        {formData.rounds.map((round, index) => (
+          <div
+            key={index}
+            className="bg-gradient-to-br from-gray-900/90 to-black/90 border border-gray-700/50 rounded-lg p-2 sm:p-4 transition-all duration-300 ease-in-out hover:border-gray-600/70 shadow-lg shadow-black/20 backdrop-blur-sm"
+          >
+            <label className="block text-sm font-medium text-slate-200 mb-3">
+              Round {round.round} <span className="text-red-400">*</span>
+            </label>
+            <label className="block text-sm font-medium text-slate-200 mb-2">
+              Name
+            </label>
+            <select
+              required
+              value={round.name}
+              onChange={e => handleRoundNameChange(index, e.target.value)}
+              className="w-full bg-gradient-to-r from-gray-950 to-black border border-gray-600/60 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-white placeholder-gray-400 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-500 shadow-inner [&>option]:bg-gray-900 [&>option]:text-white [&>option]:py-2"
+              style={{
+                colorScheme: "dark"
+              }}
+            >
+              <option value="" className="bg-gray-900 text-white">
+                Select round type
+              </option>
+              <option value="Aptitude" className="bg-gray-900 text-white">
+                Aptitude
+              </option>
+              <option value="Technical 1" className="bg-gray-900 text-white">
+                Technical 1
+              </option>
+              <option value="Technical 2" className="bg-gray-900 text-white">
+                Technical 2
+              </option>
+              <option value="Coding" className="bg-gray-900 text-white">
+                Coding
+              </option>
+              <option value="HR" className="bg-gray-900 text-white">
+                HR
+              </option>
+              <option
+                value="Group discussion (GD)"
+                className="bg-gray-900 text-white"
+              >
+                Group discussion (GD)
+              </option>
+              <option value="Essay Writing" className="bg-gray-900 text-white">
+                Essay Writing
+              </option>
+            </select>
+            <div className="mt-2 mb-2">
+              <span className="block text-sm font-medium text-slate-200 mb-1">
+                Mode
+              </span>
+              <div className="flex gap-6 sm:gap-8 items-center">
+                <label className="inline-flex items-center cursor-pointer">
                   <input
-                    type="text"
+                    type="radio"
+                    name={`mode-${index}`}
+                    value="Online"
+                    checked={round.mode === "Online"}
+                    onChange={() => handleRoundModeChange(index, "Online")}
+                    className="accent-sky-500 w-5 h-5 sm:w-6 sm:h-6 border-2 border-sky-500 focus:ring-2 focus:ring-sky-500/50 transition-all duration-200"
                     required
-                    value={formData.role}
-                    onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500"
-                    placeholder="Software Engineer, Data Analyst, etc."
                   />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Number of Rounds <span className="text-red-400">*</span>
-                  </label>
-                  <select
-                    required
-                    value={formData.numberOfRounds}
-                    onChange={(e) => handleNumberOfRoundsChange(e.target.value)}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white cursor-pointer"
-                  >
-                    <option value={0}>Select number of rounds</option>
-                    {[1, 2, 3, 4, 5].map(num => (
-                      <option key={num} value={num}>{num} {num > 1 ? '' : ''}</option>
-                    ))}
-                    <option value="5+">5+ Rounds</option>
-                  </select>
-                </div>
-              </div>
-
-              {/* Dynamic Round Fields */}
-              {formData.rounds.length > 0 && (
-                <div className="space-y-4">
-                  <h3 className="text-base sm:text-lg font-semibold text-white border-b border-gray-700 pb-2">
-                    Interview Rounds
-                  </h3>
-                  {formData.rounds.map((round, index) => (
-                    <div
-                      key={index}
-                      className="bg-gray-800 border border-gray-700 rounded-lg p-2 sm:p-4 transition-all duration-300 ease-in-out"
-                    >
-                      <label className="block text-sm font-medium text-gray-300 mb-3">
-                        Round {round.round} <span className="text-red-400">*</span>
-                      </label>
-                      <label className="block text-sm font-medium text-gray-300 mb-2">
-                        Name
-                      </label>
-                      <select
-                        required
-                        value={round.name}
-                        onChange={(e) => handleRoundNameChange(index, e.target.value)}
-                        className="w-full bg-gray-900 border border-gray-600 rounded-lg px-3 sm:px-4 py-2 sm:py-3 text-white placeholder-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500 transition-all duration-200"
-                      >
-                        <option value="">Select round type</option>
-                        <option value="Aptitude">Aptitude</option>
-                        <option value="Technical 1">Technical 1</option>
-                        <option value="Technical 2">Technical 2</option>
-                        <option value="Coding">Coding</option>
-                        <option value="HR">HR</option>
-                        <option value="Group discussion (GD)">Group discussion (GD)</option>
-                        <option value="Essay Writing">Essay Writing</option>
-                      </select>
-                      <div className="mt-2 mb-2">
-                        <span className="block text-sm font-medium text-gray-300 mb-1">Mode</span>
-                        <div className="flex gap-6 sm:gap-8 items-center">
-                          <label className="inline-flex items-center cursor-pointer">
-                            <input
-                              type="radio"
-                              name={`mode-${index}`}
-                              value="Online"
-                              checked={round.mode === 'Online'}
-                              onChange={() => handleRoundModeChange(index, 'Online')}
-                              className="accent-sky-500 w-5 h-5 sm:w-6 sm:h-6 border-2 border-sky-500 focus:ring-2 focus:ring-sky-500 transition-all duration-200"
-                              required
-                            />
-                            <span className="ml-3 text-gray-200 text-base sm:text-lg font-medium select-none">Online</span>
-                          </label>
-                          <label className="inline-flex items-center cursor-pointer">
-                            <input
-                              type="radio"
-                              name={`mode-${index}`}
-                              value="Offline"
-                              checked={round.mode === 'Offline'}
-                              onChange={() => handleRoundModeChange(index, 'Offline')}
-                              className="accent-sky-500 w-5 h-5 sm:w-6 sm:h-6 border-2 border-sky-500 focus:ring-2 focus:ring-sky-500 transition-all duration-200"
-                              required
-                            />
-                            <span className="ml-3 text-gray-200 text-base sm:text-lg font-medium select-none">Offline</span>
-                          </label>
-                        </div>
-                      </div>
-                      <label className="block text-sm font-medium text-gray-300 mt-2 mb-2">
-                        Experience
-                      </label>
-                      <textarea
-                        required
-                        value={round.experience}
-                        onChange={(e) => handleRoundExperienceChange(index, e.target.value)}
-                        rows={3}
-                        className="w-full bg-gray-900 border border-gray-600 rounded-lg px-2 sm:px-4 py-2 sm:py-3 text-white placeholder-gray-500 resize-none text-sm sm:text-base"
-                        placeholder={`Share your experience (technical questions, coding problems etc.)`}
-                      />
-                    </div>
-                  ))}
-
-                  {showAddButton && (
-                    <div className="flex justify-center">
-                      <button
-                        type="button"
-                        onClick={addNewRound}
-                        className="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-lg font-medium transition-all duration-200 flex items-center gap-2 border border-gray-600 hover:border-gray-500"
-                      >
-                        <Plus className="w-4 h-4" />
-                        Add Another Round
-                      </button>
-                    </div>
-                  )}
-                </div>
-              )}
-
-              {/* Additional Information */}
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    CTC Offered <span className="text-red-400">*</span>
-                  </label>
-                  <div className="relative">
-                    {/* Replace icon with rupee sign */}
-                    <span className="absolute left-3 top-3 w-4 h-4 sm:w-5 sm:h-5 text-gray-500 flex items-center justify-center text-base sm:text-lg font-bold">₹</span>
-                    <input
-                      type="number"
-                      required
-                      min="0"
-                      step="0.01"
-                      value={formData.ctcOffered}
-                      onChange={(e) => {
-                        // Allow only numbers with up to 2 decimal places
-                        const val = e.target.value;
-                        if (/^\d*(\.\d{0,2})?$/.test(val)) {
-                          setFormData({ ...formData, ctcOffered: val });
-                        }
-                      }}
-                      inputMode="decimal"
-                      pattern="^\\d*(\\.\\d{0,2})?$"
-                      className="w-full bg-gray-800 border border-gray-700 rounded-lg pl-11 pr-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500 appearance-none"
-                      placeholder="e.g. 6.45 LPA"
-                      style={{ MozAppearance: 'textfield' }}
-                      onWheel={e => e.target.blur()}
-                    />
-                  </div>
-                </div>
-              </div>
-
-              {/* LinkedIn Profile URL */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  LinkedIn Profile URL <span className="text-gray-500 text-xs sm:text-sm">(Optional)</span>
+                  <span className="ml-3 text-slate-200 text-base sm:text-lg font-medium select-none">
+                    Online
+                  </span>
                 </label>
-                <input
-                  type="url"
-                  value={formData.linkedin}
-                  onChange={e => setFormData({ ...formData, linkedin: e.target.value })}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500"
-                  placeholder="https://www.linkedin.com/in/your-profile"
-                />
-              </div>
-              {/* Internship Offered Toggle */}
-              <div className="flex items-center gap-4 mt-4">
-                <span className="block text-sm font-medium text-gray-300">Internship Offered?</span>
-                <button
-                  type="button"
-                  onClick={() => setFormData({ ...formData, internshipOffered: !formData.internshipOffered, internshipMonths: '' })}
-                  className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus:outline-none ${formData.internshipOffered ? 'bg-sky-500' : 'bg-gray-600'}`}
-                  aria-pressed={formData.internshipOffered}
-                >
-                  <span
-                    className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${formData.internshipOffered ? 'translate-x-6' : 'translate-x-1'}`}
-                  />
-                </button>
-                <span className="text-sm text-gray-300">{formData.internshipOffered ? 'Yes' : 'No'}</span>
-              </div>
-              {formData.internshipOffered && (
-                <div className="mt-2">
-                  <label className="block text-sm font-medium text-gray-300 mb-2">
-                    Internship period?
-                  </label>
+                <label className="inline-flex items-center cursor-pointer">
                   <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    value={formData.internshipMonths}
-                    onChange={e => {
-                      // Only allow positive integers
-                      const val = e.target.value;
-                      if (/^\d*$/.test(val)) {
-                        setFormData({ ...formData, internshipMonths: val });
-                      }
-                    }}
-                    className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500"
-                    placeholder="e.g. 6"
+                    type="radio"
+                    name={`mode-${index}`}
+                    value="Offline"
+                    checked={round.mode === "Offline"}
+                    onChange={() => handleRoundModeChange(index, "Offline")}
+                    className="accent-sky-500 w-5 h-5 sm:w-6 sm:h-6 border-2 border-sky-500 focus:ring-2 focus:ring-sky-500/50 transition-all duration-200"
+                    required
                   />
-                </div>
-              )}
-              {/* Eligibility Criteria */}
-              <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">
-                  Eligibility Criteria <span className="text-gray-500 text-xs sm:text-sm">(Optional)</span>
+                  <span className="ml-3 text-slate-200 text-base sm:text-lg font-medium select-none">
+                    Offline
+                  </span>
                 </label>
-                <textarea
-                  value={formData.eligibilityCriteria}
-                  onChange={(e) => setFormData({ ...formData, eligibilityCriteria: e.target.value })}
-                  rows={3}
-                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500 resize-none"
-                  placeholder="CGPA requirements, branch eligibility, any specific criteria..."
-                />
               </div>
-
-              {/* Submit Button */}
-              <div className="flex justify-center pt-4 sm:pt-6">
-                <button
-                  type="submit"
-                  className="bg-sky-500 text-white px-6 py-2 sm:px-8 sm:py-3 rounded-lg font-medium transition-all duration-200 transform hover:scale-105 flex items-center gap-2 text-sm sm:text-base"
-                >
-                  <Send className="w-3 h-3 sm:w-5 sm:h-5" />
-                  Submit Experience
-                </button>
-              </div>
-            </form>
+            </div>
+            <label className="block text-sm font-medium text-slate-200 mt-2 mb-2">
+              Experience
+            </label>
+            <textarea
+              required
+              value={round.experience}
+              onChange={e => handleRoundExperienceChange(index, e.target.value)}
+              rows={3}
+              className="w-full bg-gradient-to-r from-gray-950 to-black border border-gray-600/60 rounded-lg px-2 sm:px-4 py-2 sm:py-3 text-white placeholder-gray-400 resize-none text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-500 shadow-inner"
+              placeholder={`Share your experience (technical questions, coding problems etc.)`}
+            />
           </div>
+        ))}
+        {showAddButton && (
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={addNewRound}
+              className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 border border-gray-600/50 hover:border-gray-500 shadow-lg shadow-black/30 hover:shadow-black/40 transform hover:scale-105 backdrop-blur-sm"
+            >
+              <Plus className="w-4 h-4" />
+              Add Another Round
+            </button>
+          </div>
+        )}
+      </div>
+    )}
+    {/* Additional Information */}
+    <div className="grid md:grid-cols-2 gap-6">
+      <div>
+        <label className="block text-sm font-medium text-slate-200 mb-2">
+          CTC Offered <span className="text-red-400">*</span>
+        </label>
+        <div className="relative">
+          {/* Replace icon with rupee sign */}
+          <span className="absolute left-3 top-3 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex items-center justify-center text-base sm:text-lg font-bold">
+            ₹
+          </span>
+          <input
+            type="number"
+            required
+            min="0"
+            step="0.01"
+            value={formData.ctcOffered}
+            onChange={e => {
+              // Allow only numbers with up to 2 decimal places
+              const val = e.target.value
+              if (/^\d*(\.\d{0,2})?$/.test(val)) {
+                setFormData({ ...formData, ctcOffered: val })
+              }
+            }}
+            inputMode="decimal"
+            pattern="^\\d*(\\.\\d{0,2})?$"
+            className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg pl-11 pr-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-400 appearance-none focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner"
+            placeholder="e.g. 6.45 LPA"
+            style={{ MozAppearance: "textfield" }}
+            onWheel={e => e.target.blur()}
+          />
+        </div>
+      </div>
+    </div>
+    {/* LinkedIn Profile URL */}
+    <div>
+      <label className="block text-sm font-medium text-slate-200 mb-2">
+        LinkedIn Profile URL{" "}
+        <span className="text-gray-400 text-xs sm:text-sm">(Optional)</span>
+      </label>
+      <input
+        type="url"
+        value={formData.linkedin}
+        onChange={e => setFormData({ ...formData, linkedin: e.target.value })}
+        className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner"
+        placeholder="https://www.linkedin.com/in/your-profile"
+      />
+    </div>
+    {/* Internship Offered Toggle */}
+    <div className="flex items-center gap-4 mt-4">
+      <span className="block text-sm font-medium text-slate-200">
+        Internship Offered?
+      </span>
+      <button
+        type="button"
+        onClick={() =>
+          setFormData({
+            ...formData,
+            internshipOffered: !formData.internshipOffered,
+            internshipMonths: ""
+          })
+        }
+        className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus:outline-none ${
+          formData.internshipOffered
+            ? "bg-gradient-to-r from-sky-500 to-sky-600"
+            : "bg-gradient-to-r from-gray-600 to-gray-700"
+        } shadow-inner`}
+        aria-pressed={formData.internshipOffered}
+      >
+        <span
+          className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform shadow-lg ${
+            formData.internshipOffered ? "translate-x-6" : "translate-x-1"
+          }`}
+        />
+      </button>
+      <span className="text-sm text-slate-200">
+        {formData.internshipOffered ? "Yes" : "No"}
+      </span>
+    </div>
+    {formData.internshipOffered && (
+      <div className="mt-2">
+        <label className="block text-sm font-medium text-slate-200 mb-2">
+          Internship period?
+        </label>
+        <input
+          type="number"
+          min="1"
+          step="1"
+          value={formData.internshipMonths}
+          onChange={e => {
+            // Only allow positive integers
+            const val = e.target.value
+            if (/^\d*$/.test(val)) {
+              setFormData({ ...formData, internshipMonths: val })
+            }
+          }}
+          className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner"
+          placeholder="e.g. 6"
+        />
+      </div>
+    )}
+    {/* Eligibility Criteria */}
+    <div>
+      <label className="block text-sm font-medium text-slate-200 mb-2">
+        Eligibility Criteria{" "}
+        <span className="text-gray-400 text-xs sm:text-sm">(Optional)</span>
+      </label>
+      <textarea
+        value={formData.eligibilityCriteria}
+        onChange={e =>
+          setFormData({ ...formData, eligibilityCriteria: e.target.value })
+        }
+        rows={3}
+        className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-400 resize-none focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner"
+        placeholder="CGPA requirements, branch eligibility, any specific criteria..."
+      />
+    </div>
+    {/* Submit Button */}
+    <div className="flex justify-center pt-4 sm:pt-6">
+      <button
+        type="submit"
+        className="bg-gradient-to-r from-sky-500 via-sky-600 to-sky-700 hover:from-sky-400 hover:via-sky-500 hover:to-sky-600 text-white px-6 py-2 sm:px-8 sm:py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 flex items-center gap-2 text-sm sm:text-base shadow-xl shadow-sky-900/30 hover:shadow-sky-800/40 border border-sky-400/20"
+      >
+        <Send className="w-3 h-3 sm:w-5 sm:h-5" />
+        Submit Experience
+      </button>
+    </div>
+  </form>
+</div>
+
         )}
 
         {/* Thank You Message (always shown after submit) */}
