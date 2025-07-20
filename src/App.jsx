@@ -17,6 +17,8 @@ function App() {
     ctcOffered: '',
     eligibilityCriteria: '',
     linkedin: '',
+    internshipOffered: false,
+    internshipMonths: '',
   });
   const [selectedDate, setSelectedDate] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -89,6 +91,8 @@ function App() {
       ctcOffered: '',
       eligibilityCriteria: '',
       linkedin: '',
+      internshipOffered: false,
+      internshipMonths: '',
     });
     setShowAddButton(false);
   };
@@ -405,18 +409,6 @@ function App() {
               </div>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-300 mb-2">
-                Eligibility Criteria <span className="text-gray-500 text-xs sm:text-sm">(Optional)</span>
-              </label>
-              <textarea
-                value={formData.eligibilityCriteria}
-                onChange={(e) => setFormData({ ...formData, eligibilityCriteria: e.target.value })}
-                rows={3}
-                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500 resize-none"
-                placeholder="CGPA requirements, branch eligibility, any specific criteria..."
-              />
-            </div>
             {/* LinkedIn Profile URL */}
             <div>
               <label className="block text-sm font-medium text-gray-300 mb-2">
@@ -428,6 +420,56 @@ function App() {
                 onChange={e => setFormData({ ...formData, linkedin: e.target.value })}
                 className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500"
                 placeholder="https://www.linkedin.com/in/your-profile"
+              />
+            </div>
+            {/* Internship Offered Toggle */}
+            <div className="flex items-center gap-4 mt-4">
+              <span className="block text-sm font-medium text-gray-300">Internship Offered?</span>
+              <button
+                type="button"
+                onClick={() => setFormData({ ...formData, internshipOffered: !formData.internshipOffered, internshipMonths: '' })}
+                className={`relative inline-flex h-6 w-12 items-center rounded-full transition-colors focus:outline-none ${formData.internshipOffered ? 'bg-sky-500' : 'bg-gray-600'}`}
+                aria-pressed={formData.internshipOffered}
+              >
+                <span
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${formData.internshipOffered ? 'translate-x-6' : 'translate-x-1'}`}
+                />
+              </button>
+              <span className="text-sm text-gray-300">{formData.internshipOffered ? 'Yes' : 'No'}</span>
+            </div>
+            {formData.internshipOffered && (
+              <div className="mt-2">
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  How many months?
+                </label>
+                <input
+                  type="number"
+                  min="1"
+                  step="1"
+                  value={formData.internshipMonths}
+                  onChange={e => {
+                    // Only allow positive integers
+                    const val = e.target.value;
+                    if (/^\d*$/.test(val)) {
+                      setFormData({ ...formData, internshipMonths: val });
+                    }
+                  }}
+                  className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500"
+                  placeholder="e.g. 6"
+                />
+              </div>
+            )}
+            {/* Eligibility Criteria */}
+            <div>
+              <label className="block text-sm font-medium text-gray-300 mb-2">
+                Eligibility Criteria <span className="text-gray-500 text-xs sm:text-sm">(Optional)</span>
+              </label>
+              <textarea
+                value={formData.eligibilityCriteria}
+                onChange={(e) => setFormData({ ...formData, eligibilityCriteria: e.target.value })}
+                rows={3}
+                className="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-500 resize-none"
+                placeholder="CGPA requirements, branch eligibility, any specific criteria..."
               />
             </div>
 
