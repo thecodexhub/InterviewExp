@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import axios from "axios";
 import {
   Send,
   Users,
@@ -30,6 +31,25 @@ function App() {
   const [selectedDate, setSelectedDate] = useState(null);
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [showAddButton, setShowAddButton] = useState(false);
+  const [companySuggestions, setCompanySuggestions] = useState([]);
+  const [showAddOption, setShowAddOption] = useState(false);
+  const [searchTimeout, setSearchTimeout] = useState(null);
+  const [isAddingCompany, setIsAddingCompany] = useState(false);
+
+  const dropdownRef = useRef();
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setCompanySuggestions([]);
+        setShowAddOption(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleNumberOfRoundsChange = (value) => {
     const isFivePlus = value === "5+";
@@ -49,6 +69,68 @@ function App() {
     });
 
     setShowAddButton(isFivePlus);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    const upperValue = value.toUpperCase(); // Ensure all input is uppercase
+
+    setFormData((prev) => ({
+      ...prev,
+      [name]: upperValue,
+    }));
+
+    // Handle dynamic company search with delay
+    if (name === "company") {
+      if (searchTimeout) clearTimeout(searchTimeout);
+      setSearchTimeout(
+        setTimeout(() => {
+          fetchCompanySuggestions(upperValue);
+        }, 300),
+      );
+    }
+  };
+
+  const fetchCompanySuggestions = async (query) => {
+    try {
+      const { data } = await axios.get(
+        `https://codex-test-server.onrender.com/api/company/search?query=${query}`,
+      );
+      setCompanySuggestions(data || []);
+      setShowAddOption(
+        query &&
+          data.every((comp) => comp.name.toLowerCase() !== query.toLowerCase()),
+      );
+    } catch (err) {
+      console.error("Error fetching companies", err);
+      setCompanySuggestions([]);
+    }
+  };
+
+  const handleCompanySelect = async (selectedName) => {
+    if (selectedName.startsWith("ADD::")) {
+      setIsAddingCompany(true);
+      const actualName = selectedName.replace("ADD::", "");
+      try {
+        const res = await axios.post(
+          "https://codex-test-server.onrender.com/api/company/add",
+          {
+            name: actualName,
+          },
+        );
+        setFormData((prev) => ({ ...prev, company: res.data.name }));
+        setCompanySuggestions([]);
+        setShowAddOption(false);
+      } catch (err) {
+        console.error("Error adding company", err);
+      } finally {
+        setIsAddingCompany(false);
+      }
+    } else {
+      setFormData((prev) => ({ ...prev, company: selectedName }));
+      setCompanySuggestions([]);
+      setShowAddOption(false);
+    }
   };
 
   const handleRoundExperienceChange = (roundIndex, experience) => {
@@ -269,26 +351,46 @@ function App() {
                     placeholder="Your name"
                   />
                 </div>
-                <div>
+                <div className="relative" ref={dropdownRef}>
                   <label className="block text-sm font-medium text-slate-200 mb-2">
-                    Company <span className="text-red-400">*</span>
+                    Company Name <span className="text-red-400">*</span>
                   </label>
-                  <div className="relative">
-                    <Briefcase className="absolute left-3 top-3 w-4 h-4 sm:w-5 sm:h-5 text-gray-400" />
-                    <input
-                      type="text"
-                      required
-                      value={formData.company}
-                      onChange={(e) =>
-                        setFormData({
-                          ...formData,
-                          company: e.target.value.toUpperCase(),
-                        })
-                      }
-                      className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg pl-11 pr-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner"
-                      placeholder="Company name"
-                    />
-                  </div>
+                  <input
+                    name="company"
+                    required
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    placeholder="Type to Search..."
+                    className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg px-3 sm:px-4 text-sm sm:text-base py-2 sm:py-3 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-sky-500/50 focus:border-sky-500/70 transition-all duration-300 hover:border-gray-600 shadow-inner uppercase"
+                    autoComplete="off"
+                  />
+                  {(companySuggestions.length > 0 || showAddOption) && (
+                    <ul className="absolute bg-gray-900 border border-gray-700/60 w-full z-10 max-h-40 overflow-y-auto mt-1 rounded-lg shadow-2xl shadow-black/50">
+                      {companySuggestions.map((company, idx) => (
+                        <li
+                          key={idx}
+                          onClick={() => handleCompanySelect(company.name)}
+                          className="px-4 py-2 text-white hover:bg-gray-800 cursor-pointer transition-colors duration-200"
+                        >
+                          {company.name}
+                        </li>
+                      ))}
+                      {showAddOption && (
+                        <li
+                          onClick={() =>
+                            handleCompanySelect("ADD::" + formData.company)
+                          }
+                          className="px-4 py-2 bg-sky-500/20 hover:bg-sky-500/30 text-white cursor-pointer font-medium transition-colors duration-200 border-t border-gray-700/50 flex items-center justify-between"
+                        >
+                          {isAddingCompany ? (
+                            <span className="animate-spin rounded-full h-4 w-4 border-t-2 border-white border-opacity-50 mr-2"></span>
+                          ) : (
+                            <>➕ Add "{formData.company}"</>
+                          )}
+                        </li>
+                      )}
+                    </ul>
+                  )}
                 </div>
               </div>
               <div className="grid md:grid-cols-2 gap-6">
