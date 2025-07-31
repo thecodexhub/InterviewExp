@@ -3,17 +3,14 @@ import axios from "axios";
 import {
   Send,
   Users,
-  Briefcase,
-  Calendar,
-  DollarSign,
   CheckCircle,
   Plus,
 } from "lucide-react";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
   const [formData, setFormData] = useState({
+    companyId: "",
     branch: "",
     passoutYear: "",
     name: "",
@@ -78,6 +75,7 @@ function App() {
     setFormData((prev) => ({
       ...prev,
       [name]: upperValue,
+      ...(name === "company" && { companyId: "" }),
     }));
 
     // Handle dynamic company search with delay
@@ -107,7 +105,7 @@ function App() {
     }
   };
 
-  const handleCompanySelect = async (selectedName) => {
+  const handleCompanyAddSelect = async (selectedName) => {
     if (selectedName.startsWith("ADD::")) {
       setIsAddingCompany(true);
       const actualName = selectedName.replace("ADD::", "");
@@ -118,7 +116,7 @@ function App() {
             name: actualName,
           },
         );
-        setFormData((prev) => ({ ...prev, company: res.data.name }));
+        setFormData((prev) => ({ ...prev, company: res.data.name, companyId: res.data._id }));
         setCompanySuggestions([]);
         setShowAddOption(false);
       } catch (err) {
@@ -126,8 +124,12 @@ function App() {
       } finally {
         setIsAddingCompany(false);
       }
-    } else {
-      setFormData((prev) => ({ ...prev, company: selectedName }));
+    }
+  }
+
+  const handleCompanySelect = async (selectedCompany) => {
+     if(selectedCompany) {
+      setFormData((prev) => ({ ...prev, company: selectedCompany.name, companyId: selectedCompany._id }));
       setCompanySuggestions([]);
       setShowAddOption(false);
     }
@@ -169,6 +171,7 @@ function App() {
       name: formData.name,
       year: formData.passoutYear,
       dept: formData.branch ? formData.branch.toUpperCase() : "",
+      companyId: formData.companyId,
       companyName: formData.company,
       role: formData.role,
       isInternshipOrTrainingProvided: formData.internshipOffered,
@@ -369,7 +372,7 @@ function App() {
                       {companySuggestions.map((company, idx) => (
                         <li
                           key={idx}
-                          onClick={() => handleCompanySelect(company.name)}
+                          onClick={() => handleCompanySelect(company)}
                           className="px-4 py-2 text-white hover:bg-gray-800 cursor-pointer transition-colors duration-200"
                         >
                           {company.name}
@@ -378,7 +381,7 @@ function App() {
                       {showAddOption && (
                         <li
                           onClick={() =>
-                            handleCompanySelect("ADD::" + formData.company)
+                            handleCompanyAddSelect("ADD::" + formData.company)
                           }
                           className="px-4 py-2 bg-sky-500/20 hover:bg-sky-500/30 text-white cursor-pointer font-medium transition-colors duration-200 border-t border-gray-700/50 flex items-center justify-between"
                         >
@@ -422,7 +425,7 @@ function App() {
                       colorScheme: "dark",
                     }}
                   >
-                    <option value={0} className="bg-gray-900 text-white">
+                    <option value="" disabled hidden>
                       Select number of rounds
                     </option>
                     {[1, 2, 3, 4, 5].map((num) => (
@@ -469,7 +472,7 @@ function App() {
                           colorScheme: "dark",
                         }}
                       >
-                        <option value="" className="bg-gray-900 text-white">
+                        <option value="" disabled hidden>
                           Select round type
                         </option>
                         <option
