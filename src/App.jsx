@@ -1,11 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import axios from "axios";
-import {
-  Send,
-  Users,
-  CheckCircle,
-  Plus,
-} from "lucide-react";
+import { Send, Users, CheckCircle, Plus, Upload, X, Image } from "lucide-react";
 import "react-datepicker/dist/react-datepicker.css";
 
 function App() {
@@ -23,6 +18,7 @@ function App() {
     linkedin: "",
     internshipOffered: false,
     internshipMonths: "",
+    image: "", // Added image field
   });
   const [isLoading, setIsLoading] = useState(false);
   const [selectedDate, setSelectedDate] = useState(null);
@@ -32,8 +28,15 @@ function App() {
   const [showAddOption, setShowAddOption] = useState(false);
   const [searchTimeout, setSearchTimeout] = useState(null);
   const [isAddingCompany, setIsAddingCompany] = useState(false);
+  const [isImageUploaded, setIsImageUploaded] = useState(false);
+
+  // Image upload states
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadPreview, setUploadPreview] = useState(null);
 
   const dropdownRef = useRef();
+  const fileInputRef = useRef();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -116,7 +119,11 @@ function App() {
             name: actualName,
           },
         );
-        setFormData((prev) => ({ ...prev, company: res.data.name, companyId: res.data._id }));
+        setFormData((prev) => ({
+          ...prev,
+          company: res.data.name,
+          companyId: res.data._id,
+        }));
         setCompanySuggestions([]);
         setShowAddOption(false);
       } catch (err) {
@@ -125,13 +132,88 @@ function App() {
         setIsAddingCompany(false);
       }
     }
-  }
+  };
 
   const handleCompanySelect = async (selectedCompany) => {
-     if(selectedCompany) {
-      setFormData((prev) => ({ ...prev, company: selectedCompany.name, companyId: selectedCompany._id }));
+    if (selectedCompany) {
+      setFormData((prev) => ({
+        ...prev,
+        company: selectedCompany.name,
+        companyId: selectedCompany._id,
+      }));
       setCompanySuggestions([]);
       setShowAddOption(false);
+    }
+  };
+
+  // Image upload handlers
+  const handleFileSelect = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      // Check file size (limit to 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert("File size should be less than 5MB");
+        return;
+      }
+
+      // Check file type
+      if (!file.type.startsWith("image/")) {
+        alert("Please select an image file");
+        return;
+      }
+
+      setSelectedFile(file);
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setUploadPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const uploadImage = async () => {
+    if (!selectedFile) return;
+
+    setIsUploading(true);
+    const formDataUpload = new FormData();
+    formDataUpload.append("image", selectedFile);
+
+    try {
+      const response = await axios.post(
+        "https://codex-test-server.onrender.com/api/image/upload",
+        formDataUpload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        },
+      );
+
+      // Assuming the API returns the image string/URL
+      const imageString =
+        response.data.imageUrl || response.data.image || response.data;
+
+      setFormData((prev) => ({ ...prev, image: imageString }));
+      setSelectedFile(null);
+      setIsImageUploaded(true); // ✅ mark uploaded
+    } catch (error) {
+      console.error("Error uploading image:", error);
+      alert("Failed to upload image. Please try again.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const removeImage = () => {
+    setSelectedFile(null);
+    setUploadPreview(null);
+    setFormData((prev) => ({ ...prev, image: "" }));
+    setIsImageUploaded(false); // ✅ mark removed
+
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
     }
   };
 
@@ -163,6 +245,7 @@ function App() {
       rounds: [...formData.rounds, newRound],
     });
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoading(true);
@@ -187,6 +270,7 @@ function App() {
       })),
       linkedinUrl: formData.linkedin,
       eligibilityCriteria: formData.eligibilityCriteria,
+      image: formData.image, // Added image field to payload
     };
 
     try {
@@ -229,8 +313,14 @@ function App() {
       linkedin: "",
       internshipOffered: false,
       internshipMonths: "",
+      image: "",
     });
     setShowAddButton(false);
+    setSelectedFile(null);
+    setUploadPreview(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
   return (
@@ -333,10 +423,10 @@ function App() {
                     <option value="2026" className="bg-gray-900 text-white">
                       2026
                     </option>
-                    {/* <option value="2027">2027</option> */}
                   </select>
                 </div>
               </div>
+
               {/* Basic Information */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -396,6 +486,7 @@ function App() {
                   )}
                 </div>
               </div>
+
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-slate-200 mb-2">
@@ -425,7 +516,7 @@ function App() {
                       colorScheme: "dark",
                     }}
                   >
-                    <option value="" disabled hidden>
+                    <option value="">
                       Select number of rounds
                     </option>
                     {[1, 2, 3, 4, 5].map((num) => (
@@ -443,6 +534,7 @@ function App() {
                   </select>
                 </div>
               </div>
+
               {/* Dynamic Round Fields */}
               {formData.rounds.length > 0 && (
                 <div className="space-y-4">
@@ -583,6 +675,7 @@ function App() {
                   )}
                 </div>
               )}
+
               {/* Additional Information */}
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
@@ -590,7 +683,6 @@ function App() {
                     CTC Offered <span className="text-red-400">*</span>
                   </label>
                   <div className="relative">
-                    {/* Replace icon with rupee sign */}
                     <span className="absolute left-3 top-3 w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex items-center justify-center text-base sm:text-lg font-bold">
                       ₹
                     </span>
@@ -601,7 +693,6 @@ function App() {
                       step="0.01"
                       value={formData.ctcOffered}
                       onChange={(e) => {
-                        // Allow only numbers with up to 2 decimal places
                         const val = e.target.value;
                         if (/^\d*(\.\d{0,2})?$/.test(val)) {
                           setFormData({ ...formData, ctcOffered: val });
@@ -617,6 +708,145 @@ function App() {
                   </div>
                 </div>
               </div>
+
+              {/* Image Upload Section */}
+              <div>
+                <label className="block text-sm font-medium text-slate-200 mb-2">
+                  Upload Image{" "}
+                  <span className="text-gray-400 text-xs sm:text-sm">
+                    (Optional - Max 5MB)
+                  </span>
+                </label>
+
+                {!uploadPreview && !formData.image ? (
+                  <div className="space-y-3">
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      onChange={handleFileSelect}
+                      className="hidden"
+                    />
+                    <div
+                      onClick={() => fileInputRef.current?.click()}
+                      className="w-full bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 border-dashed rounded-lg p-6 text-center cursor-pointer hover:border-sky-500/50 transition-all duration-300 hover:bg-gray-900/20"
+                    >
+                      <div className="flex flex-col items-center gap-3">
+                        <div className="w-12 h-12 bg-sky-500/20 rounded-full flex items-center justify-center">
+                          <Upload className="w-6 h-6 text-sky-500" />
+                        </div>
+                        <div>
+                          <p className="text-slate-200 font-medium">
+                            Click to upload image
+                          </p>
+                          <p className="text-gray-400 text-sm mt-1">
+                            PNG, JPG, JPEG up to 5MB
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                ) : uploadPreview ? (
+                  <div className="space-y-3">
+                    <div className="bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg p-4">
+                      <div className="flex items-start gap-4">
+                        <div className="flex-shrink-0">
+                          <img
+                            src={uploadPreview}
+                            alt="Preview"
+                            className="w-16 h-16 object-cover rounded-lg border border-gray-600"
+                          />
+                        </div>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-slate-200 font-medium truncate">
+                            {selectedFile?.name}
+                          </p>
+                          <p className="text-gray-400 text-sm">
+                            {selectedFile &&
+                              (selectedFile.size / 1024 / 1024).toFixed(2)}{" "}
+                            MB
+                          </p>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={removeImage}
+                          className="flex-shrink-0 p-1 text-red-400 hover:text-red-300 transition-colors"
+                        >
+                          <X className="w-5 h-5" />
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex gap-3">
+                      <button
+                        type="button"
+                        onClick={uploadImage}
+                        disabled={isUploading || isImageUploaded}
+                        className="bg-gradient-to-r from-sky-500 to-sky-600 hover:from-sky-400 hover:to-sky-500 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300 flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {isUploading ? (
+                          <>
+                            <svg
+                              className="animate-spin h-4 w-4 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                              ></path>
+                            </svg>
+                            Uploading...
+                          </>
+                        ) : (
+                          <>
+                            <Upload className="w-4 h-4" />
+                            Upload Image
+                          </>
+                        )}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="bg-gradient-to-r from-red-500 to-red-600 hover:from-red-400 hover:to-red-500 text-white px-4 py-2 rounded-lg font-medium transition-all duration-300"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
+                ) : formData.image ? (
+                  <div className="bg-gradient-to-r from-black to-gray-950 border border-gray-700/60 rounded-lg p-4">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
+                        <Image className="w-5 h-5 text-green-500" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-slate-200 font-medium">
+                          Image uploaded successfully
+                        </p>
+                        <p className="text-gray-400 text-sm">Ready to submit</p>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={removeImage}
+                        className="text-red-400 hover:text-red-300 transition-colors"
+                      >
+                        <X className="w-5 h-5" />
+                      </button>
+                    </div>
+                  </div>
+                ) : null}
+              </div>
+
               {/* LinkedIn Profile URL */}
               <div>
                 <label className="block text-sm font-medium text-slate-200 mb-2">
@@ -635,6 +865,7 @@ function App() {
                   placeholder="https://www.linkedin.com/in/your-profile"
                 />
               </div>
+
               {/* Internship Offered Toggle */}
               <div className="flex items-center gap-4 mt-4">
                 <span className="block text-sm font-medium text-slate-200">
@@ -690,6 +921,7 @@ function App() {
                   />
                 </div>
               )}
+
               {/* Eligibility Criteria */}
               <div>
                 <label className="block text-sm font-medium text-slate-200 mb-2">
@@ -711,13 +943,16 @@ function App() {
                   placeholder="CGPA requirements, branch eligibility, any specific criteria..."
                 />
               </div>
+
               {/* Submit Button */}
               <div className="flex justify-center pt-4 sm:pt-6">
                 <button
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoading || isUploading}
                   className={`bg-gradient-to-r from-sky-500 via-sky-600 to-sky-700 hover:from-sky-400 hover:via-sky-500 hover:to-sky-600 text-white px-6 py-2 sm:px-8 sm:py-3 rounded-lg font-medium transition-all duration-300 transform hover:scale-105 flex items-center gap-2 text-sm sm:text-base shadow-xl shadow-sky-900/30 hover:shadow-sky-800/40 border border-sky-400/20 ${
-                    isLoading ? "opacity-50 cursor-not-allowed" : ""
+                    isLoading || isUploading
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
                   }`}
                 >
                   {isLoading ? (
