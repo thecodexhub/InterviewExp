@@ -577,13 +577,7 @@ function App() {
                           value="Technical 1"
                           className="bg-gray-900 text-white"
                         >
-                          Technical 1
-                        </option>
-                        <option
-                          value="Technical 2"
-                          className="bg-gray-900 text-white"
-                        >
-                          Technical 2
+                          Technical
                         </option>
                         <option
                           value="Coding"
