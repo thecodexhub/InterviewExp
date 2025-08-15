@@ -712,7 +712,7 @@ function App() {
               {/* Image Upload Section */}
               <div>
                 <label className="block text-sm font-medium text-slate-200 mb-2">
-                  Upload Image{" "}
+                  Upload your Image{" "}
                   <span className="text-gray-400 text-xs sm:text-sm">
                     (Optional - Max 5MB)
                   </span>
